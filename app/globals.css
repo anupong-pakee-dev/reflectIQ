@@ -1,26 +1,170 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-base: #050508;
+  --bg-card: #0b0b14;
+  --bg-card-hover: #0f0f1a;
+  --border: #1c1c2e;
+  --border-bright: #2a2a42;
+  --text-primary: #e8e8f0;
+  --text-secondary: #6b7280;
+  --text-muted: #374151;
+  --accent: #00d4ff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-geist-mono), monospace;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Animations ── */
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes log-entry {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes oaa-flicker {
+  0%, 100% { text-shadow: 0 0 20px var(--glow-color, #00d4ff), 0 0 40px var(--glow-color, #00d4ff); }
+  45%  { text-shadow: 0 0 10px var(--glow-color, #00d4ff); }
+  50%  { text-shadow: 0 0 30px var(--glow-color, #00d4ff), 0 0 60px var(--glow-color, #00d4ff); }
+}
+
+@keyframes rank-appear {
+  0%   { transform: scale(0.8) rotateY(-20deg); opacity: 0; }
+  60%  { transform: scale(1.08) rotateY(4deg); opacity: 1; }
+  100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes border-glow {
+  0%, 100% { border-color: var(--glow-border, #1c1c2e); }
+  50%       { border-color: var(--glow-border-bright, #2a2a42); }
+}
+
+/* ── Utility classes ── */
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-oaa {
+  animation: oaa-flicker 4s ease-in-out infinite;
+}
+
+.animate-rank {
+  animation: rank-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.35s ease-out forwards;
+}
+
+.animate-log {
+  animation: log-entry 0.25s ease-out forwards;
+}
+
+/* ── Custom slider ── */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #1c1c2e;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--thumb-color, #00d4ff);
+  border: 2px solid #050508;
+  box-shadow: 0 0 8px var(--thumb-color, #00d4ff);
+  transition: box-shadow 0.2s ease;
+  margin-top: -5px;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 16px var(--thumb-color, #00d4ff);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #1c1c2e;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--thumb-color, #00d4ff);
+  border: 2px solid #050508;
+  box-shadow: 0 0 8px var(--thumb-color, #00d4ff);
+}
+
+/* ── Scrollbar ── */
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0b0b14; }
+::-webkit-scrollbar-thumb { background: #2a2a42; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a5a; }
+
+/* ── Scanlines overlay ── */
+
+.scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+}
+
+/* ── Card styles ── */
+
+.cote-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+.cote-card-bright {
+  background: var(--bg-card);
+  border: 1px solid var(--border-bright);
+  border-radius: 2px;
 }

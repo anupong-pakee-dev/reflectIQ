@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ──────────────────────────────────────────────
+//  User — authentication & authorization
+// ──────────────────────────────────────────────
+model User {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  passwordHash String
+
+  // Role: PENDING | STUDENT | ADMIN
+  role        String @default("PENDING")
+  displayName String
+  motivation  String
+  goals       String
+  checkinFreq String
+
+  reviewNote String?
+  reviewedAt DateTime?
+
+  passwordResetToken   String?  @unique
+  passwordResetExpires DateTime?
+
+  lastLoginAt DateTime?
+
+  student   Student?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+// ──────────────────────────────────────────────
+//  Student — core profile
+// ──────────────────────────────────────────────
+model Student {
+  id        String   @id @default(cuid())
+  name      String
+  studentId String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Optional User link (null = legacy pre-auth record)
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
+
+  // OAA Parameters (0–100)
+  // All stats start at 0; initial assessment caps the first write at 2/100
+  academic     Int @default(0)
+  physical     Int @default(0)
+  social       Int @default(0)
+  mental       Int @default(0)
+  leadership   Int @default(0)
+  adaptability Int @default(0)
+
+  // Points economy
+  privatePoints Int   @default(100000)
+  classPoints   Float @default(1000)
+
+  // Initial assessment
+  assessmentDone Boolean @default(false)
+
+  // Streak
+  lastCheckin   DateTime?
+  checkinStreak Int @default(0)
+
+  // Relations
+  logs            ActivityLog[]
+  achievements    StudentAchievement[]
+  exams           ExamResult[]
+  transactions    PointTransaction[]
+  dailyChallenges DailyChallenge[]
+}
+
+// ──────────────────────────────────────────────
+//  Daily Challenge tracker
+// ──────────────────────────────────────────────
+model DailyChallenge {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  statId    String   // academic | physical | social | mental | leadership | adaptability
+  date      String   // YYYY-MM-DD
+  answered  Int      @default(0)
+  correct   Int      @default(0)
+  wrong     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, statId, date])
+  @@index([studentId])
+}
+
+// ──────────────────────────────────────────────
+//  Activity Log
+// ──────────────────────────────────────────────
+model ActivityLog {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  type      String
+  message   String
+  delta     Int?
+  statId    String?
+  color     String?
+  createdAt DateTime @default(now())
+
+  @@index([studentId])
+  @@index([createdAt(sort: Desc)])
+}
+
+// ──────────────────────────────────────────────
+//  Achievements
+// ──────────────────────────────────────────────
+model StudentAchievement {
+  id         String   @id @default(cuid())
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  code       String
+  unlockedAt DateTime @default(now())
+
+  @@unique([studentId, code])
+  @@index([studentId])
+}
+
+// ──────────────────────────────────────────────
+//  Exam Results
+// ──────────────────────────────────────────────
+model ExamResult {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject   String
+  score     Int
+  maxScore  Int      @default(100)
+  passed    Boolean  @default(false)
+  notes     String?
+  examDate  DateTime @default(now())
+
+  @@index([studentId])
+  @@index([examDate(sort: Desc)])
+}
+
+// ──────────────────────────────────────────────
+//  Point Transactions
+// ──────────────────────────────────────────────
+model PointTransaction {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  type      String
+  amount    Int
+  balance   Int
+  reason    String
+  createdAt DateTime @default(now())
+
+  @@index([studentId])
+  @@index([createdAt(sort: Desc)])
+}
