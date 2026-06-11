@@ -87,6 +87,10 @@ export interface Translations {
   examQuizSubmit: string;
   examQuizSubmitting: string;
   examQuizUnanswered: string;
+  examQuizQCount: string;
+  examQuizPtEach: string;
+  examQuizAttempts: string;
+  examQuizWarning: string;
 
   // Parameters tab
   paramsReadOnlyNote: string;
@@ -302,8 +306,12 @@ const th: Translations = {
   examQuizPrev: "ก่อนหน้า",
   examQuizNext: "ถัดไป",
   examQuizSubmit: "ส่งคำตอบ",
-  examQuizSubmitting: "กำลังส่ง...",
+  examQuizSubmitting: "กำลังตรวจ...",
   examQuizUnanswered: "มีข้อที่ยังไม่ได้ตอบ",
+  examQuizQCount: "ข้อ",
+  examQuizPtEach: "คะแนน/ข้อ",
+  examQuizAttempts: "ครั้ง",
+  examQuizWarning: "การสอบนี้ทำได้ครั้งเดียวเท่านั้น ไม่มีการเฉลย และผลจะถูกบันทึกถาวร",
   paramsReadOnlyNote: "ค่าพารามิเตอร์ถูกกำหนดโดยระบบจากผลการประเมินเบื้องต้น ไม่สามารถแก้ไขด้วยตนเองได้ ค่าจะเปลี่ยนได้ผ่านการสอบพิเศษเท่านั้น",
   achievementTotal: "ความสำเร็จทั้งหมด",
   lockedDesc: "???",
@@ -497,8 +505,12 @@ const jp: Translations = {
   examQuizPrev: "前へ",
   examQuizNext: "次へ",
   examQuizSubmit: "解答を提出",
-  examQuizSubmitting: "送信中...",
+  examQuizSubmitting: "採点中...",
   examQuizUnanswered: "未回答の問題があります",
+  examQuizQCount: "問",
+  examQuizPtEach: "点/問",
+  examQuizAttempts: "回",
+  examQuizWarning: "この試験は1回のみ受験可能です。解答は表示されず、結果は永久に記録されます。",
   paramsReadOnlyNote: "パラメータ値はシステムによる初期評価で決定されます。手動での変更はできません。特別試験のみ変更可能です。",
   achievementTotal: "取得済み実績",
   lockedDesc: "???",
@@ -692,8 +704,12 @@ const en: Translations = {
   examQuizPrev: "PREV",
   examQuizNext: "NEXT",
   examQuizSubmit: "SUBMIT ANSWERS",
-  examQuizSubmitting: "Submitting...",
+  examQuizSubmitting: "Grading...",
   examQuizUnanswered: "Some questions are unanswered",
+  examQuizQCount: "questions",
+  examQuizPtEach: "pt each",
+  examQuizAttempts: "attempt",
+  examQuizWarning: "This exam can be taken only once. No answer key is shown, and the result is recorded permanently.",
   paramsReadOnlyNote: "Parameters are determined by the system from your initial assessment. They cannot be edited manually. Only Special Exams can alter them.",
   achievementTotal: "TOTAL UNLOCKED",
   lockedDesc: "???",
@@ -887,8 +903,12 @@ const thJp: Translations = {
   examQuizPrev: "ก่อนหน้า",
   examQuizNext: "ถัดไป",
   examQuizSubmit: "ส่งคำตอบ",
-  examQuizSubmitting: "กำลังส่ง...",
+  examQuizSubmitting: "กำลังตรวจ...",
   examQuizUnanswered: "มีข้อที่ยังไม่ได้ตอบ",
+  examQuizQCount: "ข้อ",
+  examQuizPtEach: "คะแนน/ข้อ",
+  examQuizAttempts: "ครั้ง",
+  examQuizWarning: "การสอบนี้ทำได้ครั้งเดียวเท่านั้น ไม่มีการเฉลย และผลจะถูกบันทึกถาวร",
   paramsReadOnlyNote: "ค่าพารามิเตอร์ถูกกำหนดโดยระบบจากผลการประเมินเบื้องต้น (初期評価) ไม่สามารถแก้ไขด้วยตนเอง ค่าจะเปลี่ยนได้ผ่านการสอบพิเศษ (特別試験) เท่านั้น",
   achievementTotal: "TOTAL UNLOCKED",
   lockedDesc: "???",
